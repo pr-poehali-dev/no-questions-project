@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
 const PANEL_URL = "http://64.188.64.134/";
@@ -20,7 +20,15 @@ const whyUs: { icon: string; title: string; text: string }[] = [
   { icon: "CircleDollarSign", title: "Лучшее соотношение цены", text: "Предлагаем оптимальное соотношение цены и качества на рынке. Все необходимые характеристики для стабильной работы игровых проектов любого масштаба." },
 ];
 
-const plans = [
+type Plan = {
+  name: string;
+  price: string;
+  free?: boolean;
+  specs: { icon: string; label: string; val: string }[];
+  features?: string[];
+};
+
+const plans: Plan[] = [
   {
     name: "GAMING-ZERO",
     price: "72",
@@ -58,16 +66,20 @@ const plans = [
     ],
   },
   {
-    name: "GAMING-3",
-    price: "389",
+    name: "БЕСПЛАТНЫЙ ТАРИФ",
+    price: "0",
+    free: true,
     specs: [
-      { icon: "Cpu", label: "Процессор", val: "250% AMD Ryzen 9 7950X3D" },
-      { icon: "MemoryStick", label: "Оперативная память", val: "9 GB DDR4" },
-      { icon: "HardDrive", label: "Хранилище", val: "40 GB NVMe SSD" },
-      { icon: "Network", label: "Сеть", val: "4 портов" },
-      { icon: "RefreshCw", label: "Резервные копии", val: "1 бекапов" },
-      { icon: "Database", label: "Базы данных", val: "3 баз данных" },
+      { icon: "Cpu", label: "Процессор", val: "AMD Ерус 125% vCPU" },
+      { icon: "MemoryStick", label: "Оперативная память", val: "2 ГБ DDR4" },
+      { icon: "HardDrive", label: "Хранилище", val: "5 ГБ SSD" },
+      { icon: "Network", label: "Сеть", val: "Базовая" },
+      { icon: "RefreshCw", label: "Резервные копии", val: "Нет" },
+      { icon: "Database", label: "Базы данных", val: "Нет" },
+      { icon: "Shield", label: "Защита", val: "Базовая (DDoS)" },
+      { icon: "Users", label: "Поддержка", val: "Базовая" },
     ],
+    features: ["Базовая производительность", "Локация: Германия", "Доп. порты: Нет"],
   },
   {
     name: "GAMING-4",
@@ -131,8 +143,6 @@ function Bubbles() {
 export default function Index() {
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ telegram: "", email: "", comment: "" });
-  const [bubblesOn, setBubblesOn] = useState(true);
-
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -146,7 +156,7 @@ export default function Index() {
     <div className="min-h-screen font-['Montserrat'] relative" style={{ background: "#0d0a1a" }}>
 
       {/* ЛЕТАЮЩИЕ КРУЖОЧКИ */}
-      {bubblesOn && <Bubbles />}
+      <Bubbles />
 
       {/* NAVBAR */}
       <nav
@@ -284,34 +294,82 @@ export default function Index() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {plans.map((plan, i) => (
-              <div key={i} className="rounded-xl p-6 flex flex-col" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(139,92,246,0.25)" }}>
-                <div className="flex items-center gap-2 mb-4">
-                  <Icon name="Server" size={14} style={{ color: "#a78bfa" }} />
-                  <span className="text-sm font-semibold" style={{ color: "#a78bfa" }}>{plan.name}</span>
-                </div>
-                <div className="mb-5">
+              <div
+                key={i}
+                className="rounded-xl p-6 flex flex-col"
+                style={{
+                  background: plan.free ? "rgba(139,92,246,0.06)" : "rgba(255,255,255,0.04)",
+                  border: plan.free ? "1px solid rgba(139,92,246,0.45)" : "1px solid rgba(139,92,246,0.25)",
+                }}
+              >
+                {plan.free && (
+                  <div className="text-center text-xs font-semibold tracking-widest mb-3" style={{ color: "#a78bfa" }}>
+                    БЕСПЛАТНЫЙ ТАРИФ
+                  </div>
+                )}
+                {!plan.free && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <Icon name="Server" size={14} style={{ color: "#a78bfa" }} />
+                    <span className="text-sm font-semibold" style={{ color: "#a78bfa" }}>{plan.name}</span>
+                  </div>
+                )}
+                <div
+                  className={plan.free ? "text-center mb-5 pb-4" : "mb-5"}
+                  style={plan.free ? { borderBottom: "1px solid rgba(139,92,246,0.2)" } : {}}
+                >
                   <span className="text-4xl font-bold text-white">{plan.price}</span>
-                  <span className="text-sm text-gray-400">₽ / мес.</span>
+                  <span className="text-sm font-bold text-white">₽</span>
+                  <span className="text-sm text-gray-400">/мес.</span>
                 </div>
-                <div className="flex flex-col gap-3 flex-1 mb-6">
-                  {plan.specs.map((row, j) => (
-                    <div key={j} className="flex items-start gap-2">
-                      <Icon name={row.icon} size={14} className="mt-0.5 flex-shrink-0" style={{ color: "#8b5cf6" }} />
-                      <div>
-                        <div className="text-xs text-gray-400">{row.label}</div>
-                        <div className="text-sm text-gray-200">{row.val}</div>
+
+                {plan.free ? (
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 flex-1 mb-4">
+                    {plan.specs.map((row, j) => (
+                      <div key={j} className="flex items-start gap-2">
+                        <Icon name={row.icon} size={13} className="mt-0.5 flex-shrink-0" style={{ color: "#8b5cf6" }} />
+                        <div>
+                          <div className="text-xs text-gray-400">{row.label}</div>
+                          <div className="text-sm text-gray-200">{row.val}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3 flex-1 mb-6">
+                    {plan.specs.map((row, j) => (
+                      <div key={j} className="flex items-start gap-2">
+                        <Icon name={row.icon} size={14} className="mt-0.5 flex-shrink-0" style={{ color: "#8b5cf6" }} />
+                        <div>
+                          <div className="text-xs text-gray-400">{row.label}</div>
+                          <div className="text-sm text-gray-200">{row.val}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {plan.features && (
+                  <div className="rounded-lg p-3 mb-4" style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)" }}>
+                    {plan.features.map((f, j) => (
+                      <div key={j} className="flex items-center gap-2 text-sm mb-1 last:mb-0" style={{ color: "#a78bfa" }}>
+                        <Icon name="Check" size={13} /> {f}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
                 <a
                   href={PANEL_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-white rounded transition-all hover:bg-white/10"
-                  style={{ border: "1px solid rgba(139,92,246,0.5)" }}
+                  className="flex items-center justify-center gap-2 py-2.5 text-sm font-medium text-white rounded transition-all"
+                  style={
+                    plan.free
+                      ? { background: "linear-gradient(135deg,#7c3aed,#9333ea)" }
+                      : { border: "1px solid rgba(139,92,246,0.5)" }
+                  }
                 >
-                  <Icon name="ShoppingCart" size={14} /> Перейти к покупке
+                  {plan.free ? "Забрать" : <><Icon name="ShoppingCart" size={14} /> Перейти к покупке</>}
                 </a>
               </div>
             ))}
@@ -344,22 +402,6 @@ export default function Index() {
           </a>
         </div>
       </section>
-
-      {/* КНОПКА ОТКЛЮЧЕНИЯ КРУЖОЧКОВ */}
-      <div className="relative z-10 py-10 px-8 flex justify-center" style={{ background: "#100d20" }}>
-        <button
-          onClick={() => setBubblesOn(v => !v)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all hover:opacity-80"
-          style={{
-            background: bubblesOn ? "rgba(139,92,246,0.15)" : "rgba(255,255,255,0.05)",
-            border: `1px solid ${bubblesOn ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.2)"}`,
-            color: bubblesOn ? "#a78bfa" : "#6b7280",
-          }}
-        >
-          <Icon name={bubblesOn ? "CircleOff" : "Circle"} size={16} />
-          {bubblesOn ? "Отключить анимацию кружочков" : "Включить анимацию кружочков"}
-        </button>
-      </div>
 
       {/* REGISTRATION MODAL */}
       {modalOpen && (
