@@ -71,25 +71,48 @@ export default {
 			},
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' }
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
-				}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' }
+				},
+				'portal-flicker': {
+					'0%, 100%': { opacity: '0.85', transform: 'scaleX(1)' },
+					'25%': { opacity: '1', transform: 'scaleX(1.015)' },
+					'50%': { opacity: '0.9', transform: 'scaleX(0.99)' },
+					'75%': { opacity: '1', transform: 'scaleX(1.01)' },
+				},
+				'portal-glow': {
+					'0%, 100%': { opacity: '0.5', transform: 'scale(1)' },
+					'50%': { opacity: '0.9', transform: 'scale(1.05)' },
+				},
+				'particle-float': {
+					'0%': { transform: 'translateY(0px) translateX(0px)', opacity: '0' },
+					'20%': { opacity: '1' },
+					'80%': { opacity: '1' },
+					'100%': { transform: 'translateY(-120px) translateX(20px)', opacity: '0' },
+				},
+				'particle-float2': {
+					'0%': { transform: 'translateY(0px) translateX(0px)', opacity: '0' },
+					'20%': { opacity: '0.8' },
+					'80%': { opacity: '0.8' },
+					'100%': { transform: 'translateY(-100px) translateX(-15px)', opacity: '0' },
+				},
+				'stone-glow': {
+					'0%, 100%': { boxShadow: '0 0 8px rgba(139,92,246,0.3)' },
+					'50%': { boxShadow: '0 0 20px rgba(139,92,246,0.7)' },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'portal-flicker': 'portal-flicker 3s ease-in-out infinite',
+				'portal-glow': 'portal-glow 2.5s ease-in-out infinite',
+				'particle-float': 'particle-float 4s ease-in-out infinite',
+				'particle-float2': 'particle-float2 5s ease-in-out infinite',
+				'stone-glow': 'stone-glow 2s ease-in-out infinite',
 			}
 		}
 	},

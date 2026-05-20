@@ -126,18 +126,149 @@ export default function Index() {
       <section
         id="hero"
         className="relative min-h-screen flex items-center overflow-hidden pt-20"
-        style={{ background: "linear-gradient(135deg,#0d0a1a 0%,#130e28 50%,#1a0e2e 100%)" }}
+        style={{ background: "linear-gradient(160deg,#06030f 0%,#0d0820 40%,#130a2a 70%,#1a0a30 100%)" }}
       >
-        {/* Фоновое свечение */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute right-0 top-0 w-1/2 h-full" style={{ background: "radial-gradient(ellipse at 75% 50%, rgba(124,58,237,0.2) 0%, transparent 65%)" }} />
+        {/* Звёздный фон */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(60)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                width: Math.random() * 2 + 1 + "px",
+                height: Math.random() * 2 + 1 + "px",
+                background: "white",
+                left: Math.random() * 100 + "%",
+                top: Math.random() * 100 + "%",
+                opacity: Math.random() * 0.5 + 0.1,
+              }}
+            />
+          ))}
         </div>
 
-        {/* Контент + портал в две колонки */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-8 flex items-center justify-between gap-8">
+        {/* Почва / пол */}
+        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 80 }}>
+          {/* Земля */}
+          <div className="absolute bottom-0 left-0 right-0" style={{ height: 48, background: "linear-gradient(0deg,#0a0615 0%,#130820 100%)" }}>
+            {/* Блоки земли */}
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute bottom-0"
+                style={{
+                  left: i * (100 / 30) + "%",
+                  width: (100 / 30) + "%",
+                  height: 36 + (i % 3) * 4 + "px",
+                  background: i % 2 === 0 ? "rgba(30,15,55,0.9)" : "rgba(22,10,42,0.9)",
+                  borderTop: "1px solid rgba(80,40,120,0.4)",
+                  borderLeft: "1px solid rgba(60,30,100,0.3)",
+                }}
+              />
+            ))}
+          </div>
+        </div>
 
-          {/* Левая часть */}
-          <div className="flex-1 min-w-0">
+        {/* Портал — абсолютно справа во весь рост */}
+        <div className="absolute right-0 top-0 bottom-0 hidden lg:flex items-end justify-center pointer-events-none" style={{ width: "42%" }}>
+          {/* Фоновое свечение портала */}
+          <div
+            className="absolute animate-portal-glow"
+            style={{
+              bottom: 44,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 220,
+              height: "78%",
+              background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,0.55) 0%, rgba(80,20,160,0.3) 50%, transparent 80%)",
+              filter: "blur(30px)",
+            }}
+          />
+
+          {/* Каменная рама — боковые стойки */}
+          {/* Левая стойка */}
+          <div className="absolute animate-stone-glow" style={{ bottom: 44, left: "calc(50% - 90px)", width: 28, height: "74%", background: "linear-gradient(90deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3 }}>
+            {[...Array(12)].map((_, i) => (
+              <div key={i} style={{ height: "8.33%", borderBottom: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
+            ))}
+          </div>
+          {/* Правая стойка */}
+          <div className="absolute animate-stone-glow" style={{ bottom: 44, right: "calc(50% - 90px)", width: 28, height: "74%", background: "linear-gradient(270deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3, animationDelay: "0.3s" }}>
+            {[...Array(12)].map((_, i) => (
+              <div key={i} style={{ height: "8.33%", borderBottom: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
+            ))}
+          </div>
+          {/* Верхняя перекладина */}
+          <div className="absolute animate-stone-glow" style={{ top: "8%", left: "50%", transform: "translateX(-50%)", width: 208, height: 28, background: "linear-gradient(0deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3, animationDelay: "0.6s" }}>
+            {[...Array(7)].map((_, i) => (
+              <div key={i} style={{ display: "inline-block", width: "14.28%", height: "100%", borderRight: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
+            ))}
+          </div>
+          {/* Нижняя перекладина */}
+          <div className="absolute animate-stone-glow" style={{ bottom: 44, left: "50%", transform: "translateX(-50%)", width: 208, height: 22, background: "linear-gradient(180deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3, animationDelay: "0.9s" }}>
+            {[...Array(7)].map((_, i) => (
+              <div key={i} style={{ display: "inline-block", width: "14.28%", height: "100%", borderRight: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
+            ))}
+          </div>
+
+          {/* Внутренность портала — мерцающий фиолетовый */}
+          <div
+            className="absolute animate-portal-flicker"
+            style={{
+              bottom: 66,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 152,
+              height: "calc(74% - 50px)",
+              background: "linear-gradient(180deg, rgba(100,40,200,0.95) 0%, rgba(130,60,220,0.9) 30%, rgba(80,20,180,0.95) 60%, rgba(110,50,210,0.9) 100%)",
+              boxShadow: "0 0 30px rgba(139,92,246,0.8), inset 0 0 40px rgba(180,120,255,0.3)",
+            }}
+          >
+            {/* Звёзды внутри портала */}
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full"
+                style={{
+                  width: Math.random() * 3 + 1 + "px",
+                  height: Math.random() * 3 + 1 + "px",
+                  background: "rgba(220,200,255,0.9)",
+                  left: Math.random() * 90 + 5 + "%",
+                  top: Math.random() * 90 + 5 + "%",
+                  animation: `portal-glow ${1.5 + Math.random() * 2}s ease-in-out infinite`,
+                  animationDelay: Math.random() * 2 + "s",
+                }}
+              />
+            ))}
+            {/* Волны портала */}
+            <div style={{ position: "absolute", inset: 0, background: "repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(160,100,255,0.08) 8px, rgba(160,100,255,0.08) 9px)" }} />
+          </div>
+
+          {/* Частицы вылетают из портала */}
+          {[
+            { left: "44%", bottom: "55%", delay: "0s", anim: "particle-float" },
+            { left: "52%", bottom: "60%", delay: "1s", anim: "particle-float2" },
+            { left: "48%", bottom: "50%", delay: "2s", anim: "particle-float" },
+            { left: "56%", bottom: "65%", delay: "0.5s", anim: "particle-float2" },
+            { left: "40%", bottom: "58%", delay: "1.5s", anim: "particle-float" },
+          ].map((p, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                left: p.left, bottom: p.bottom,
+                width: 4, height: 4,
+                background: "rgba(180,130,255,0.9)",
+                boxShadow: "0 0 6px rgba(139,92,246,1)",
+                animation: `${p.anim} 3s ease-in-out infinite`,
+                animationDelay: p.delay,
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Контент слева */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-8">
+          <div className="max-w-xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-2">
               Защищённый хостинг<br />
               Майнкрафт серверов
@@ -147,7 +278,7 @@ export default function Index() {
             </h2>
             <div className="w-10 h-0.5 mb-10" style={{ background: "#8b5cf6" }} />
 
-            <div className="grid grid-cols-4 gap-6 mb-12 max-w-xl">
+            <div className="grid grid-cols-4 gap-6 mb-12">
               {heroFeatures.map((item, i) => (
                 <div key={i} className="flex flex-col items-center gap-2 text-center">
                   <div
@@ -180,19 +311,6 @@ export default function Index() {
               </button>
             </div>
           </div>
-
-          {/* Правая часть — портал */}
-          <div className="hidden lg:flex flex-shrink-0 items-center justify-center" style={{ width: 420, height: 480 }}>
-            <div className="relative w-full h-full">
-              <img
-                src="https://cdn.poehali.dev/projects/702ea760-52d1-490f-9515-9895080a023f/bucket/b29bd484-a809-403b-b2ed-cf533c837c6b.png"
-                alt="Minecraft Portal"
-                className="w-full h-full object-contain"
-                style={{ filter: "drop-shadow(0 0 40px rgba(124,58,237,0.7)) drop-shadow(0 0 80px rgba(139,92,246,0.4))" }}
-              />
-            </div>
-          </div>
-
         </div>
       </section>
 
