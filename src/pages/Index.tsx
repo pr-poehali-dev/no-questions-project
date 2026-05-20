@@ -126,60 +126,73 @@ export default function Index() {
       <section
         id="hero"
         className="relative min-h-screen flex items-center overflow-hidden pt-20"
-        style={{ background: "radial-gradient(ellipse 60% 80% at 80% 50%, rgba(120,60,200,0.35) 0%, transparent 70%), linear-gradient(135deg,#0d0a1a 0%,#130e28 50%,#1a0e2e 100%)" }}
+        style={{ background: "linear-gradient(135deg,#0d0a1a 0%,#130e28 50%,#1a0e2e 100%)" }}
       >
+        {/* Фоновое свечение */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute right-0 top-0 w-1/2 h-full" style={{ background: "radial-gradient(ellipse at 80% 30%, rgba(124,58,237,0.2) 0%, transparent 60%)" }} />
-          <div className="absolute right-16 top-1/2 -translate-y-1/2 opacity-25">
-            <div
-              className="w-56 h-80 rounded-2xl"
-              style={{ background: "linear-gradient(180deg, rgba(124,58,237,0.5) 0%, rgba(60,20,120,0.7) 100%)", border: "1px solid rgba(139,92,246,0.4)", boxShadow: "0 0 100px rgba(124,58,237,0.4)" }}
-            />
-          </div>
+          <div className="absolute right-0 top-0 w-1/2 h-full" style={{ background: "radial-gradient(ellipse at 75% 50%, rgba(124,58,237,0.2) 0%, transparent 65%)" }} />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-8">
-          <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-2">
-            Защищённый хостинг<br />
-            Майнкрафт серверов
-          </h1>
-          <h2 className="text-5xl md:text-6xl font-bold mb-2" style={{ color: "#8b5cf6" }}>
-            С низкими ценами
-          </h2>
-          <div className="w-10 h-0.5 mb-10" style={{ background: "#8b5cf6" }} />
+        {/* Контент + портал в две колонки */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-8 flex items-center justify-between gap-8">
 
-          <div className="flex flex-wrap gap-8 mb-12">
-            {heroFeatures.map((item, i) => (
-              <div key={i} className="flex flex-col items-center gap-2 text-center">
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(124,58,237,0.25)", border: "1px solid rgba(139,92,246,0.4)" }}
-                >
-                  <Icon name={item.icon} size={20} style={{ color: "#a78bfa" }} />
+          {/* Левая часть */}
+          <div className="flex-1 min-w-0">
+            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-2">
+              Защищённый хостинг<br />
+              Майнкрафт серверов
+            </h1>
+            <h2 className="text-5xl md:text-6xl font-bold mb-2" style={{ color: "#8b5cf6" }}>
+              С низкими ценами
+            </h2>
+            <div className="w-10 h-0.5 mb-10" style={{ background: "#8b5cf6" }} />
+
+            <div className="grid grid-cols-4 gap-6 mb-12 max-w-xl">
+              {heroFeatures.map((item, i) => (
+                <div key={i} className="flex flex-col items-center gap-2 text-center">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                    style={{ background: "rgba(124,58,237,0.3)", border: "1px solid rgba(139,92,246,0.5)" }}
+                  >
+                    <Icon name={item.icon} size={20} style={{ color: "#a78bfa" }} />
+                  </div>
+                  <span className="text-xs text-gray-400 leading-tight">{item.text.replace(/\n/g, " ")}</span>
                 </div>
-                <span className="text-xs text-gray-400 whitespace-pre-line leading-tight max-w-[90px]">{item.text}</span>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={PANEL_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 px-6 py-3 text-white font-semibold rounded transition-all hover:opacity-90 active:scale-95"
+                style={{ background: "linear-gradient(135deg,#7c3aed,#9333ea)" }}
+              >
+                <Icon name="ArrowRight" size={16} /> Создать сервер
+              </a>
+              <button
+                onClick={() => scrollTo("pricing")}
+                className="flex items-center gap-2 px-6 py-3 text-white font-semibold rounded transition-all hover:bg-white/10"
+                style={{ border: "1px solid rgba(255,255,255,0.4)" }}
+              >
+                <Icon name="List" size={16} /> Посмотреть тарифы
+              </button>
+            </div>
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            <a
-              href={PANEL_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-2 px-6 py-3 text-white font-semibold rounded transition-all hover:opacity-90 active:scale-95"
-              style={{ background: "linear-gradient(135deg,#7c3aed,#9333ea)" }}
-            >
-              <Icon name="ArrowRight" size={16} /> Создать сервер
-            </a>
-            <button
-              onClick={() => scrollTo("pricing")}
-              className="flex items-center gap-2 px-6 py-3 text-white font-semibold rounded transition-all hover:bg-white/10"
-              style={{ border: "1px solid rgba(255,255,255,0.4)" }}
-            >
-              <Icon name="List" size={16} /> Посмотреть тарифы
-            </button>
+          {/* Правая часть — портал */}
+          <div className="hidden lg:flex flex-shrink-0 items-center justify-center" style={{ width: 420, height: 480 }}>
+            <div className="relative w-full h-full">
+              <img
+                src="https://cdn.poehali.dev/projects/702ea760-52d1-490f-9515-9895080a023f/bucket/b29bd484-a809-403b-b2ed-cf533c837c6b.png"
+                alt="Minecraft Portal"
+                className="w-full h-full object-contain"
+                style={{ filter: "drop-shadow(0 0 40px rgba(124,58,237,0.7)) drop-shadow(0 0 80px rgba(139,92,246,0.4))" }}
+              />
+            </div>
           </div>
+
         </div>
       </section>
 
