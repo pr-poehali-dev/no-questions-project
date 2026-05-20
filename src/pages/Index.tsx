@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 const PANEL_URL = "http://64.188.64.134/";
 const TELEGRAM_URL = "https://t.me/TreexHost_manager_bot?text=Привет!%20Хочу%20получить%20аккаунт%20в%20панели%20Treex%20Hosting";
 
 const heroFeatures: { icon: string; text: string }[] = [
-  { icon: "Cpu", text: "Высокопроизводительные\nAMD Ryzen 9 и Intel i9" },
-  { icon: "Shield", text: "Продвинутая\nзащита от DDoS\nатак" },
-  { icon: "Users", text: "Управление\nигроками прямо\nиз панели" },
-  { icon: "Zap", text: "Установка\nлюбых ядер в\nдва клика" },
+  { icon: "Cpu", text: "Высокопроизводительные AMD Ryzen 9 и Intel i9" },
+  { icon: "Shield", text: "Продвинутая защита от DDoS атак" },
+  { icon: "Users", text: "Управление игроками прямо из панели" },
+  { icon: "Zap", text: "Установка любых ядер в два клика" },
 ];
 
 const whyUs: { icon: string; title: string; text: string }[] = [
@@ -57,11 +57,81 @@ const plans = [
       { icon: "Database", label: "Базы данных", val: "2 баз данных" },
     ],
   },
+  {
+    name: "GAMING-3",
+    price: "389",
+    specs: [
+      { icon: "Cpu", label: "Процессор", val: "250% AMD Ryzen 9 7950X3D" },
+      { icon: "MemoryStick", label: "Оперативная память", val: "9 GB DDR4" },
+      { icon: "HardDrive", label: "Хранилище", val: "40 GB NVMe SSD" },
+      { icon: "Network", label: "Сеть", val: "4 портов" },
+      { icon: "RefreshCw", label: "Резервные копии", val: "1 бекапов" },
+      { icon: "Database", label: "Базы данных", val: "3 баз данных" },
+    ],
+  },
+  {
+    name: "GAMING-4",
+    price: "520",
+    specs: [
+      { icon: "Cpu", label: "Процессор", val: "300% AMD Ryzen 9 7950X3D" },
+      { icon: "MemoryStick", label: "Оперативная память", val: "12 GB DDR4" },
+      { icon: "HardDrive", label: "Хранилище", val: "60 GB NVMe SSD" },
+      { icon: "Network", label: "Сеть", val: "6 портов" },
+      { icon: "RefreshCw", label: "Резервные копии", val: "1 бекапов" },
+      { icon: "Database", label: "Базы данных", val: "4 баз данных" },
+    ],
+  },
+  {
+    name: "GAMING-5",
+    price: "750",
+    specs: [
+      { icon: "Cpu", label: "Процессор", val: "400% AMD Ryzen 9 7950X3D" },
+      { icon: "MemoryStick", label: "Оперативная память", val: "16 GB DDR4" },
+      { icon: "HardDrive", label: "Хранилище", val: "80 GB NVMe SSD" },
+      { icon: "Network", label: "Сеть", val: "8 портов" },
+      { icon: "RefreshCw", label: "Резервные копии", val: "2 бекапов" },
+      { icon: "Database", label: "Базы данных", val: "5 баз данных" },
+    ],
+  },
 ];
+
+// Генерируем кружочки один раз
+const BUBBLES = Array.from({ length: 18 }, (_, i) => ({
+  id: i,
+  size: Math.floor(Math.random() * 60 + 20),
+  left: Math.random() * 95,
+  duration: Math.random() * 14 + 10,
+  delay: Math.random() * 10,
+  opacity: Math.random() * 0.18 + 0.06,
+  color: i % 3 === 0 ? "rgba(139,92,246," : i % 3 === 1 ? "rgba(99,55,210," : "rgba(180,130,255,",
+}));
+
+function Bubbles() {
+  return (
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {BUBBLES.map((b) => (
+        <div
+          key={b.id}
+          className="absolute rounded-full"
+          style={{
+            width: b.size,
+            height: b.size,
+            left: b.left + "%",
+            bottom: "-80px",
+            background: `radial-gradient(circle at 35% 35%, ${b.color}0.4), transparent 70%), ${b.color}${b.opacity})`,
+            border: `1px solid ${b.color}0.35)`,
+            animation: `bubble-rise ${b.duration}s ${b.delay}s linear infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Index() {
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState({ telegram: "", email: "", comment: "" });
+  const [bubblesOn, setBubblesOn] = useState(true);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -73,7 +143,10 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen font-['Montserrat']" style={{ background: "#0d0a1a" }}>
+    <div className="min-h-screen font-['Montserrat'] relative" style={{ background: "#0d0a1a" }}>
+
+      {/* ЛЕТАЮЩИЕ КРУЖОЧКИ */}
+      {bubblesOn && <Bubbles />}
 
       {/* NAVBAR */}
       <nav
@@ -128,145 +201,10 @@ export default function Index() {
         className="relative min-h-screen flex items-center overflow-hidden pt-20"
         style={{ background: "linear-gradient(160deg,#06030f 0%,#0d0820 40%,#130a2a 70%,#1a0a30 100%)" }}
       >
-        {/* Звёздный фон */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(60)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                width: Math.random() * 2 + 1 + "px",
-                height: Math.random() * 2 + 1 + "px",
-                background: "white",
-                left: Math.random() * 100 + "%",
-                top: Math.random() * 100 + "%",
-                opacity: Math.random() * 0.5 + 0.1,
-              }}
-            />
-          ))}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute right-0 top-0 w-1/2 h-full" style={{ background: "radial-gradient(ellipse at 75% 50%, rgba(124,58,237,0.18) 0%, transparent 65%)" }} />
         </div>
 
-        {/* Почва / пол */}
-        <div className="absolute bottom-0 left-0 right-0 pointer-events-none" style={{ height: 80 }}>
-          {/* Земля */}
-          <div className="absolute bottom-0 left-0 right-0" style={{ height: 48, background: "linear-gradient(0deg,#0a0615 0%,#130820 100%)" }}>
-            {/* Блоки земли */}
-            {[...Array(30)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute bottom-0"
-                style={{
-                  left: i * (100 / 30) + "%",
-                  width: (100 / 30) + "%",
-                  height: 36 + (i % 3) * 4 + "px",
-                  background: i % 2 === 0 ? "rgba(30,15,55,0.9)" : "rgba(22,10,42,0.9)",
-                  borderTop: "1px solid rgba(80,40,120,0.4)",
-                  borderLeft: "1px solid rgba(60,30,100,0.3)",
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Портал — абсолютно справа во весь рост */}
-        <div className="absolute right-0 top-0 bottom-0 hidden lg:flex items-end justify-center pointer-events-none" style={{ width: "42%" }}>
-          {/* Фоновое свечение портала */}
-          <div
-            className="absolute animate-portal-glow"
-            style={{
-              bottom: 44,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: 220,
-              height: "78%",
-              background: "radial-gradient(ellipse 80% 60% at 50% 50%, rgba(124,58,237,0.55) 0%, rgba(80,20,160,0.3) 50%, transparent 80%)",
-              filter: "blur(30px)",
-            }}
-          />
-
-          {/* Каменная рама — боковые стойки */}
-          {/* Левая стойка */}
-          <div className="absolute animate-stone-glow" style={{ bottom: 44, left: "calc(50% - 90px)", width: 28, height: "74%", background: "linear-gradient(90deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3 }}>
-            {[...Array(12)].map((_, i) => (
-              <div key={i} style={{ height: "8.33%", borderBottom: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
-            ))}
-          </div>
-          {/* Правая стойка */}
-          <div className="absolute animate-stone-glow" style={{ bottom: 44, right: "calc(50% - 90px)", width: 28, height: "74%", background: "linear-gradient(270deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3, animationDelay: "0.3s" }}>
-            {[...Array(12)].map((_, i) => (
-              <div key={i} style={{ height: "8.33%", borderBottom: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
-            ))}
-          </div>
-          {/* Верхняя перекладина */}
-          <div className="absolute animate-stone-glow" style={{ top: "8%", left: "50%", transform: "translateX(-50%)", width: 208, height: 28, background: "linear-gradient(0deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3, animationDelay: "0.6s" }}>
-            {[...Array(7)].map((_, i) => (
-              <div key={i} style={{ display: "inline-block", width: "14.28%", height: "100%", borderRight: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
-            ))}
-          </div>
-          {/* Нижняя перекладина */}
-          <div className="absolute animate-stone-glow" style={{ bottom: 44, left: "50%", transform: "translateX(-50%)", width: 208, height: 22, background: "linear-gradient(180deg,#1a1028 0%,#2d1f4a 40%,#1e1235 100%)", border: "2px solid rgba(100,60,180,0.5)", borderRadius: 3, animationDelay: "0.9s" }}>
-            {[...Array(7)].map((_, i) => (
-              <div key={i} style={{ display: "inline-block", width: "14.28%", height: "100%", borderRight: "1px solid rgba(80,40,140,0.4)", background: i % 2 === 0 ? "rgba(50,25,80,0.6)" : "rgba(35,18,60,0.6)" }} />
-            ))}
-          </div>
-
-          {/* Внутренность портала — мерцающий фиолетовый */}
-          <div
-            className="absolute animate-portal-flicker"
-            style={{
-              bottom: 66,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: 152,
-              height: "calc(74% - 50px)",
-              background: "linear-gradient(180deg, rgba(100,40,200,0.95) 0%, rgba(130,60,220,0.9) 30%, rgba(80,20,180,0.95) 60%, rgba(110,50,210,0.9) 100%)",
-              boxShadow: "0 0 30px rgba(139,92,246,0.8), inset 0 0 40px rgba(180,120,255,0.3)",
-            }}
-          >
-            {/* Звёзды внутри портала */}
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute rounded-full"
-                style={{
-                  width: Math.random() * 3 + 1 + "px",
-                  height: Math.random() * 3 + 1 + "px",
-                  background: "rgba(220,200,255,0.9)",
-                  left: Math.random() * 90 + 5 + "%",
-                  top: Math.random() * 90 + 5 + "%",
-                  animation: `portal-glow ${1.5 + Math.random() * 2}s ease-in-out infinite`,
-                  animationDelay: Math.random() * 2 + "s",
-                }}
-              />
-            ))}
-            {/* Волны портала */}
-            <div style={{ position: "absolute", inset: 0, background: "repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(160,100,255,0.08) 8px, rgba(160,100,255,0.08) 9px)" }} />
-          </div>
-
-          {/* Частицы вылетают из портала */}
-          {[
-            { left: "44%", bottom: "55%", delay: "0s", anim: "particle-float" },
-            { left: "52%", bottom: "60%", delay: "1s", anim: "particle-float2" },
-            { left: "48%", bottom: "50%", delay: "2s", anim: "particle-float" },
-            { left: "56%", bottom: "65%", delay: "0.5s", anim: "particle-float2" },
-            { left: "40%", bottom: "58%", delay: "1.5s", anim: "particle-float" },
-          ].map((p, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                left: p.left, bottom: p.bottom,
-                width: 4, height: 4,
-                background: "rgba(180,130,255,0.9)",
-                boxShadow: "0 0 6px rgba(139,92,246,1)",
-                animation: `${p.anim} 3s ease-in-out infinite`,
-                animationDelay: p.delay,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Контент слева */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-8">
           <div className="max-w-xl">
             <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-2">
@@ -287,7 +225,7 @@ export default function Index() {
                   >
                     <Icon name={item.icon} size={20} style={{ color: "#a78bfa" }} />
                   </div>
-                  <span className="text-xs text-gray-400 leading-tight">{item.text.replace(/\n/g, " ")}</span>
+                  <span className="text-xs text-gray-400 leading-tight">{item.text}</span>
                 </div>
               ))}
             </div>
@@ -315,7 +253,7 @@ export default function Index() {
       </section>
 
       {/* WHY US */}
-      <section id="features" className="py-20 px-8" style={{ background: "#100d20" }}>
+      <section id="features" className="relative z-10 py-20 px-8" style={{ background: "#100d20" }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white">Почему стоит выбрать нас?</h2>
@@ -338,8 +276,8 @@ export default function Index() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" className="py-20 px-8" style={{ background: "#0d0a1a" }}>
-        <div className="max-w-5xl mx-auto">
+      <section id="pricing" className="relative z-10 py-20 px-8" style={{ background: "#0d0a1a" }}>
+        <div className="max-w-6xl mx-auto">
           <div className="mb-10">
             <h2 className="text-3xl font-bold text-white">Тарифы (Германия DE)</h2>
             <div className="w-10 h-0.5 mt-3" style={{ background: "#8b5cf6" }} />
@@ -382,7 +320,7 @@ export default function Index() {
       </section>
 
       {/* CONTACTS */}
-      <section id="contacts" className="py-20 px-8" style={{ background: "#100d20", borderTop: "1px solid rgba(139,92,246,0.15)" }}>
+      <section id="contacts" className="relative z-10 py-20 px-8" style={{ background: "#100d20", borderTop: "1px solid rgba(139,92,246,0.15)" }}>
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
             <h2 className="text-3xl font-bold text-white">Контакты</h2>
@@ -406,6 +344,22 @@ export default function Index() {
           </a>
         </div>
       </section>
+
+      {/* КНОПКА ОТКЛЮЧЕНИЯ КРУЖОЧКОВ */}
+      <div className="relative z-10 py-10 px-8 flex justify-center" style={{ background: "#100d20" }}>
+        <button
+          onClick={() => setBubblesOn(v => !v)}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all hover:opacity-80"
+          style={{
+            background: bubblesOn ? "rgba(139,92,246,0.15)" : "rgba(255,255,255,0.05)",
+            border: `1px solid ${bubblesOn ? "rgba(139,92,246,0.5)" : "rgba(255,255,255,0.2)"}`,
+            color: bubblesOn ? "#a78bfa" : "#6b7280",
+          }}
+        >
+          <Icon name={bubblesOn ? "CircleOff" : "Circle"} size={16} />
+          {bubblesOn ? "Отключить анимацию кружочков" : "Включить анимацию кружочков"}
+        </button>
+      </div>
 
       {/* REGISTRATION MODAL */}
       {modalOpen && (

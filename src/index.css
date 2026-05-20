@@ -97,3 +97,23 @@
     margin-top: 8px;
   }
 }
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-45vh) translateX(30px) scale(1.05);
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-105vh) translateX(-20px) scale(0.8);
+    opacity: 0;
+  }
+}
